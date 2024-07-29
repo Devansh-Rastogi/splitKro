@@ -1,4 +1,4 @@
-package com.devansh.splitKro.service;
+package com.devansh.splitKro.service.split.impl;
 
 import com.devansh.splitKro.enums.SplitTypeEnum;
 import com.devansh.splitKro.model.DebtUser;
@@ -10,6 +10,7 @@ import com.devansh.splitKro.model.exepense.SplitDetails;
 import com.devansh.splitKro.model.group.GroupResponseDto;
 import com.devansh.splitKro.model.user.UserResponseDto;
 import com.devansh.splitKro.repository.UserRepository;
+import com.devansh.splitKro.service.split.SplitService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class EquallySplitService implements SplitService{
+public class EquallySplitService implements SplitService {
     private static final SplitTypeEnum SPLIT_TYPE = SplitTypeEnum.EQUALLY;
 
     @Autowired
@@ -40,6 +41,7 @@ public class EquallySplitService implements SplitService{
                 split.setAmount(payerDto.getAmount());
                 split.setGroupMembers(createDebtUser(payerDto, splitDetail.getDebtUserDtos()));
                 split.setExpense(expense);
+                split.setSplitType(SPLIT_TYPE);
                 splitList.add(split);
             }
         }

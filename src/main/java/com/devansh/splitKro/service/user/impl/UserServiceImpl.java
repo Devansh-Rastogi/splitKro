@@ -1,10 +1,11 @@
-package com.devansh.splitKro.service.user;
+package com.devansh.splitKro.service.user.impl;
 
 import com.devansh.splitKro.exception.UserNotFoundException;
 import com.devansh.splitKro.model.user.User;
 import com.devansh.splitKro.model.user.UserRequestDto;
 import com.devansh.splitKro.model.user.UserResponseDto;
 import com.devansh.splitKro.repository.UserRepository;
+import com.devansh.splitKro.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -14,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;

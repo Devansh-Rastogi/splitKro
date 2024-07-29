@@ -9,10 +9,14 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
 public interface UserUserRelationshipRepository extends JpaRepository<UserUserRelationship, UserUserRelationshipId> {
+
+    @Query("SELECT u FROM UserUserRelationship u WHERE u.id.groupId = :groupId")
+    List<UserUserRelationship> findByGroupId(@Param("groupId") Long groupId);
 
     @Query("SELECT u FROM UserUserRelationship u WHERE u.id.user1Id = :user1Id AND u.id.user2Id = :user2Id AND u.id.groupId = :groupId")
     Optional<UserUserRelationship> findByUserIdsAndGroupId(@Param("user1Id") Long user1Id, @Param("user2Id") Long user2Id, @Param("groupId") Long groupId);

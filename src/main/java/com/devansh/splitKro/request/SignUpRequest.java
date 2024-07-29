@@ -1,4 +1,4 @@
-package com.devansh.splitKro.dao.request;
+package com.devansh.splitKro.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

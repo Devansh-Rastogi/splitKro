@@ -1,7 +1,8 @@
-package com.devansh.splitKro.service.group;
+package com.devansh.splitKro.service.group.impl;
 
 import com.devansh.splitKro.exception.GroupNotFoundException;
 import com.devansh.splitKro.exception.UserNotFoundException;
+import com.devansh.splitKro.model.Split;
 import com.devansh.splitKro.model.group.GroupRequestDto;
 import com.devansh.splitKro.model.group.GroupResponseDto;
 import com.devansh.splitKro.model.group.SplitKroGroup;
@@ -12,6 +13,7 @@ import com.devansh.splitKro.model.user.UserResponseDto;
 import com.devansh.splitKro.repository.GroupRepository;
 import com.devansh.splitKro.repository.UserRepository;
 import com.devansh.splitKro.repository.UserUserRelationshipRepository;
+import com.devansh.splitKro.service.group.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +24,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
-public class GroupServiceImpl implements GroupService{
+public class GroupServiceImpl implements GroupService {
 
     @Autowired
     private GroupRepository groupRepository;
@@ -55,6 +57,36 @@ public class GroupServiceImpl implements GroupService{
         return groupResponseDto;
     }
 
+    @Override
+    public GroupResponseDto addMemberToGroup(Long groupId, Set<Long> userIds) {
+        SplitKroGroup splitKroGroup = groupRepository.findById(groupId).orElseThrow(() -> new GroupNotFoundException("No Group Found with the groupId : " + groupId));
+        Set<Long> alreadyAddedUserIds = splitKroGroup.getUserSet().stream().map(User::getId).collect(Collectors.toSet());
+        Set<Long> x = userIds.stream().filter(userId -> !alreadyAddedUserIds.contains(userId)).collect(Collectors.toSet());
+        List<User> newUserAdded = userRepository.findAllById(x);
+        splitKroGroup.getUserSet().addAll(newUserAdded);
+        List<UserUserRelationship> userUserRelationships = updateUserUserRelationship(splitKroGroup.getUserSet(), newUserAdded, splitKroGroup);
+        splitKroGroup.getUserUserRelationShips().addAll(userUserRelationships);
+        groupRepository.save(splitKroGroup);
+        return new GroupResponseDto(splitKroGroup);
+    }
+
+    private List<UserUserRelationship> updateUserUserRelationship(Set<User> userSet, List<User> newUserAdded, SplitKroGroup splitKroGroup) {
+        List<UserUserRelationship> userUserRelationships = new ArrayList<>();
+        Set<Long> newIds = newUserAdded.stream().map(User::getId).collect(Collectors.toSet());
+        for (User user : userSet) {
+            for(User user1: userSet){
+                if(!newIds.contains(user.getId()) && !newIds.contains(user1.getId()))
+                    continue;
+                UserUserRelationship userUserRelationship = new UserUserRelationship();
+                userUserRelationship.setUser1(user);
+                userUserRelationship.setUser2(user1);
+                userUserRelationship.setGroup(splitKroGroup);
+                userUserRelationships.add(userUserRelationship);
+            }
+        }
+        return userUserRelationships;
+    }
+
     private List<UserUserRelationship> createUserUserRelationShip(Set<User> userSet, SplitKroGroup splitKroGroup) {
         List<UserUserRelationship> userUserRelationships = new ArrayList<>();
         for (User user : userSet) {
@@ -75,12 +107,6 @@ public class GroupServiceImpl implements GroupService{
     }
 
     @Override
-    public void addMemberToGroup(Long groupId, UserRequestDto user) {
-        User newUser = userRepository.findById(user.getId()).orElseThrow(() -> new UserNotFoundException("No user found"));
-        groupRepository.findById(groupId).ifPresentOrElse(splitKroGroup -> splitKroGroup.getUserSet().add(newUser), ()->{throw new GroupNotFoundException("No Group Found");});
-    }
-
-    @Override
     public void removeMemberFromGroup(Long groupId, UserRequestDto user) {
 
     }
@@ -92,17 +118,27 @@ public class GroupServiceImpl implements GroupService{
 
     @Override
     public GroupResponseDto getGroupById(Long groupId) {
-        return null;
+        return new GroupResponseDto(groupRepository.findById(groupId).get());
     }
 
     @Override
     public GroupResponseDto updateGroup(Long groupId, GroupRequestDto updatedGroupRequestDto) {
-        return null;
+        SplitKroGroup splitKroGroup = groupRepository.findById(groupId).get();
+        if(updatedGroupRequestDto.getGroupName()!=null){
+            splitKroGroup.setGroupName(updatedGroupRequestDto.getGroupName());
+        }
+        splitKroGroup = groupRepository.save(splitKroGroup);
+        return new GroupResponseDto(splitKroGroup);
     }
 
     @Override
     @Transactional
     public void deleteGroup(Long groupId) {
         groupRepository.deleteById(groupId);
+    }
+
+    @Override
+    public List<UserUserRelationship> getDebtsRelation(Long groupId) {
+        return userUserRelationshipRepository.findByGroupId(groupId);
     }
 }

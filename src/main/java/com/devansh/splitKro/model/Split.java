@@ -1,5 +1,6 @@
 package com.devansh.splitKro.model;
 
+import com.devansh.splitKro.enums.SplitTypeEnum;
 import com.devansh.splitKro.model.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -35,6 +36,8 @@ public class Split {
     private List<DebtUser> groupMembers;
 
     private BigDecimal amount;
+
+    private SplitTypeEnum splitType;
 
     @ManyToOne
     @JoinColumn(name = "expense_id")

@@ -1,9 +1,9 @@
 package com.devansh.splitKro.controller;
 
 
-import com.devansh.splitKro.dao.request.SignUpRequest;
-import com.devansh.splitKro.dao.request.SigninRequest;
-import com.devansh.splitKro.dao.response.JwtAuthenticationResponse;
+import com.devansh.splitKro.request.SignUpRequest;
+import com.devansh.splitKro.request.SigninRequest;
+import com.devansh.splitKro.response.JwtAuthenticationResponse;
 import com.devansh.splitKro.service.security.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

@@ -1,4 +1,4 @@
-package com.devansh.splitKro.service;
+package com.devansh.splitKro.service.split;
 
 import com.devansh.splitKro.enums.SplitTypeEnum;
 import com.devansh.splitKro.model.Expense;
