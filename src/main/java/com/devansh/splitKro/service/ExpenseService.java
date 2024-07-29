@@ -11,6 +11,7 @@ import com.devansh.splitKro.repository.ExpenseRepository;
 import com.devansh.splitKro.repository.GroupRepository;
 import com.devansh.splitKro.repository.SplitRepository;
 import com.devansh.splitKro.repository.UserUserRelationshipRepository;
+import com.devansh.splitKro.service.split.SplitService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -47,5 +48,13 @@ public class ExpenseService {
             }
         }
         return new ExpenseResponseDto();
+    }
+
+    public Expense getExpense(Long expenseId) {
+        return expenseRepository.findById(expenseId).get();
+    }
+
+    public void deleteExpense(Long expenseId) {
+        expenseRepository.deleteById(expenseId);
     }
 }

@@ -16,7 +16,6 @@ import java.util.List;
 @Table
 public class DebtUser {
     @Id
-    @Column(name = "debt_user_id")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     @OneToOne

@@ -1,5 +1,6 @@
-package com.devansh.splitKro.service.security;
+package com.devansh.splitKro.service.security.impl;
 
+import com.devansh.splitKro.service.security.JwtService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

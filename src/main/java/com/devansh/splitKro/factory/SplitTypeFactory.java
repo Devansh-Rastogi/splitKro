@@ -1,7 +1,7 @@
 package com.devansh.splitKro.factory;
 
 import com.devansh.splitKro.enums.SplitTypeEnum;
-import com.devansh.splitKro.service.SplitService;
+import com.devansh.splitKro.service.split.SplitService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

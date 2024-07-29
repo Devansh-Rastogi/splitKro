@@ -1,4 +1,4 @@
-package com.devansh.splitKro.dao.response;
+package com.devansh.splitKro.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
